@@ -18,55 +18,105 @@ class FavDexApp extends StatelessWidget {
       title: 'FavDex',
       debugShowCheckedModeBanner: false,
       initialRoute: '/home',
-      getPages: [
-        GetPage(name: '/home', page: () => const Home()),
-      ]
+      getPages: [GetPage(name: '/home', page: () => const Home())],
     );
   }
 }
 
-
-
-
-class AppPages{
-  static final pages =[
-    GetPage(
-      name: '/home', 
-      page: () => const Home()
-    ),
-  ];
+class AppPages {
+  static final pages = [GetPage(name: '/home', page: () => const Home())];
 }
 
-
-class Home extends StatelessWidget{
+class Home extends StatelessWidget {
   const Home({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
+    final controlador = Get.put(Controlador());
+
     return Scaffold(
-      appBar: AppBar(title: Text('FavDex')),
-      body: Center(child: Text('Home do FavDex')),
+      appBar: AppBar(title: const Text('FavDex')),
+      body: Obx(() {
+        if (controlador.loading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return NotificationListener<ScrollNotification>(
+          onNotification: (scrollNotification) {
+            if (scrollNotification.metrics.pixels >=
+                scrollNotification.metrics.maxScrollExtent - 200) {
+              controlador.buscarApi();
+            }
+
+            return false;
+          },
+          child: GridView.builder(
+            padding: const EdgeInsets.all(12),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 0.75,
+            ),
+            itemCount:
+                controlador.pokemonList.length +
+                (controlador.loadingMore.value ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index == controlador.pokemonList.length) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              final pokemon = controlador.pokemonList[index];
+
+              return Card(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (pokemon.imageUrl != null)
+                      Image.network(pokemon.imageUrl!, height: 100),
+                    Text('ID: ${pokemon.id}'),
+                    Text(
+                      pokemon.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text('Peso: ${pokemon.weight}'),
+                    Text('Altura: ${pokemon.height}'),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      }),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Configurações'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Favoritos',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Configurações',
+          ),
         ],
       ),
     );
   }
 }
 
-
-
 class Controlador extends GetxController {
   var pokemonList = <PokemonModel>[].obs;
   var loading = false.obs;
-  
-  // 1. Variável que faltava declarar!
-  var loadingMore = false.obs; 
 
-  String? urlProximaPagina = 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=20';
+  // 1. Variável que faltava declarar!
+  var loadingMore = false.obs;
+
+  String? urlProximaPagina =
+      'https://pokeapi.co/api/v2/pokemon?offset=0&limit=20';
 
   @override
   void onInit() {
@@ -74,29 +124,27 @@ class Controlador extends GetxController {
     buscarApi();
   }
 
-  Future<void> buscarApi() async { 
+  Future<void> buscarApi() async {
     if (urlProximaPagina == null || loadingMore.value) return;
 
     try {
-
-      if (pokemonList.isEmpty){ 
+      if (pokemonList.isEmpty) {
         loading.value = true;
       }
-      loadingMore.value = true; 
+      loadingMore.value = true;
 
-
-      final uri = Uri.parse(urlProximaPagina!); 
+      final uri = Uri.parse(urlProximaPagina!);
       final resposta = await http.get(uri);
 
       if (resposta.statusCode == 200) {
         final Map<String, dynamic> dados = jsonDecode(resposta.body);
-        
-        urlProximaPagina = dados['next']; 
-        
+
+        urlProximaPagina = dados['next'];
+
         final List<dynamic> resultados = dados['results'];
 
         List<Future<http.Response>> chamadasPendentes = [];
-        for (var pokemon in resultados) { 
+        for (var pokemon in resultados) {
           final uriPokemon = Uri.parse(pokemon['url']);
           chamadasPendentes.add(http.get(uriPokemon));
         }
@@ -116,18 +164,13 @@ class Controlador extends GetxController {
       print('Erro ao buscar dados: $e');
     } finally {
       loading.value = false;
-      loadingMore.value = false; //
+      loadingMore.value = false;
     }
   }
 }
 
-
-
-
-
-
-class PokemonModel{
-  final int id; 
+class PokemonModel {
+  final int id;
   final String name;
   final String? imageUrl;
   final int? weight;
@@ -141,11 +184,12 @@ class PokemonModel{
     this.height,
   });
 
-  factory PokemonModel.fromJson(Map<String, dynamic> resultado){
+  factory PokemonModel.fromJson(Map<String, dynamic> resultado) {
     return PokemonModel(
       id: resultado['id'],
       name: resultado['name'],
-      imageUrl: resultado['sprites']['other']['official-artwork']['front_default'],
+      imageUrl:
+          resultado['sprites']['other']['official-artwork']['front_default'],
       weight: resultado['weight'],
       height: resultado['height'],
     );
