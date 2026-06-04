@@ -16,14 +16,26 @@ class FavDexApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'FavDex',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-      ),
-      home: Home(),
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/home',
+      getPages: [
+        GetPage(name: '/home', page: () => const Home()),
+      ]
     );
   }
 }
 
+
+
+
+class AppPages{
+  static final pages =[
+    GetPage(
+      name: '/home', 
+      page: () => const Home()
+    ),
+  ];
+}
 
 
 class Home extends StatelessWidget{
