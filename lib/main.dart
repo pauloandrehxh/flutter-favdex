@@ -113,7 +113,7 @@ class PokemonModel{
     return PokemonModel(
       id: resultado['id'],
       name: resultado['name'],
-      imageUrl: resultado['sprites']['front_default'],
+      imageUrl: resultado['sprites']['other']['official-artwork']['front_default'],
       weight: resultado['weight'],
       height: resultado['height'],
     );
