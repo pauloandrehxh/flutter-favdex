@@ -19,13 +19,31 @@ class FavDexApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
       ),
-      home: const Scaffold(
-        body: Center(child: Text('FavDex Iniciado')),
-      ),
+      home: Home(),
     );
   }
 }
 
+
+
+class Home extends StatelessWidget{
+  const Home({super.key});
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('FavDex')),
+      body: Center(child: Text('Home do FavDex')),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Configurações'),
+        ],
+      ),
+    );
+  }
+}
 
 
 
