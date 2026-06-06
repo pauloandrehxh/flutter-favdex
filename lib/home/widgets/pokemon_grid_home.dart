@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:favdex/home/home_controlador.dart';
 import 'pokemon_cards.dart';
 
-
-
 class GridPokemonHome extends StatelessWidget {
   const GridPokemonHome({super.key});
 
@@ -12,26 +10,28 @@ class GridPokemonHome extends StatelessWidget {
   Widget build(BuildContext context) {
     final controlador = Get.find<HomeControlador>();
 
-    return GridView.builder(
-      padding: const EdgeInsets.all(12),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
-        childAspectRatio: 1.5,
+    return Obx(
+      () => GridView.builder(
+        padding: const EdgeInsets.all(12),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 0.85,
+        ),
+        itemCount:
+            controlador.pokemonList.length +
+            (controlador.loadingMore.value ? 1 : 0),
+        itemBuilder: (context, index) {
+          if (index == controlador.pokemonList.length) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final pokemon = controlador.pokemonList[index];
+
+          return PokemonCard(pokemon: pokemon);
+        },
       ),
-      itemCount:
-          controlador.pokemonList.length +
-          (controlador.loadingMore.value ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (index == controlador.pokemonList.length) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        final pokemon = controlador.pokemonList[index];
-
-        return PokemonCard(pokemon: pokemon);
-      }
     );
   }
 }
