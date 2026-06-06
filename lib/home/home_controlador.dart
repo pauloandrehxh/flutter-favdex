@@ -6,7 +6,7 @@ import 'package:favdex/data/models/pokemon_model.dart';
 
 
 
-class Controlador extends GetxController {
+class HomeControlador extends GetxController {
   var pokemonList = <PokemonModel>[].obs;
   var loading = false.obs;
 

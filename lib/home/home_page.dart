@@ -10,7 +10,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controlador = Get.put(Controlador());
+    final controlador = Get.put(HomeControlador());
 
     return Scaffold(
       appBar: AppBar(title: const Text('FavDex')),

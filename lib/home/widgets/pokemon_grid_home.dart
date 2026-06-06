@@ -10,7 +10,7 @@ class GridPokemonHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controlador = Get.find<Controlador>();
+    final controlador = Get.find<HomeControlador>();
 
     return GridView.builder(
       padding: const EdgeInsets.all(12),
