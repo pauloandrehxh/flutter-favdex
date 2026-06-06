@@ -9,21 +9,38 @@ class PokemonCard extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return Card(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Stack(
         children: [
-          if (pokemon.imageUrl != null)
-            Image.network(pokemon.imageUrl!, height: 100),
-          Text('ID: ${pokemon.id}'),
-          Text(
-            pokemon.name,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (pokemon.imageUrl != null)
+                  Image.network(pokemon.imageUrl!, height: 100),
+                Text('ID: ${pokemon.id}'),
+                Text(
+                  pokemon.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text('Peso: ${pokemon.weight}'),
+                Text('Altura: ${pokemon.height}'),
+              ],
             ),
           ),
-          Text('Peso: ${pokemon.weight}'),
-          Text('Altura: ${pokemon.height}'),
+
+          Positioned(
+            bottom: 8,
+            right: 8,
+            child: IconButton(
+              icon: const Icon(Icons.favorite_border),
+              onPressed: () {
+                // Lógica para adicionar aos favoritos
+              },
+            ),
+          ),
         ],
       ),
     );
