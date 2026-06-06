@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:favdex/home/home_controlador.dart';
 import 'widgets/pokemon_grid_home.dart';
-import 'widgets/bottoms.dart';
+import '../app/bottoms.dart';
 
 
 class Home extends StatelessWidget {

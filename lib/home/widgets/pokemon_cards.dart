@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:favdex/data/models/pokemon_model.dart';
 import 'package:get/get.dart';
-import '../home_controlador.dart';
+import 'package:favdex/home/home_controlador.dart';
 
 class PokemonCard extends StatelessWidget{
   final PokemonModel pokemon;
