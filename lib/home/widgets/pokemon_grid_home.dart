@@ -17,7 +17,7 @@ class GridPokemonHome extends StatelessWidget {
           crossAxisCount: 2,
           mainAxisSpacing: 12,
           crossAxisSpacing: 12,
-          childAspectRatio: 0.85,
+          childAspectRatio: 1.5,
         ),
         itemCount:
             controlador.pokemonList.length +

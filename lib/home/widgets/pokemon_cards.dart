@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:favdex/data/models/pokemon_model.dart';
+import 'package:get/get.dart';
+import '../home_controlador.dart';
 
 class PokemonCard extends StatelessWidget{
   final PokemonModel pokemon;
-
   const PokemonCard({super.key, required this.pokemon});
+
 
   @override
   Widget build(BuildContext context){
+
+    final controlador = Get.find<HomeControlador>();
+
+
     return Card(
       child: Stack(
         children: [
@@ -34,12 +40,24 @@ class PokemonCard extends StatelessWidget{
           Positioned(
             bottom: 8,
             right: 8,
-            child: IconButton(
-              icon: const Icon(Icons.favorite_border),
-              onPressed: () {
-                // Lógica para adicionar aos favoritos
-              },
-            ),
+            child: Obx(() {
+              final isFavorito = controlador.isFavorito(pokemon);
+              if (isFavorito) {
+                return IconButton(
+                  icon: const Icon(Icons.favorite,
+                  color: Colors.red),
+                  onPressed: () {
+                    controlador.toggleFavorito(pokemon);
+                  },
+                );
+              }
+              return IconButton(
+                icon: const Icon(Icons.favorite_border),
+                onPressed: () { 
+                  controlador.toggleFavorito(pokemon);
+                },
+              );
+            }),
           ),
         ],
       ),

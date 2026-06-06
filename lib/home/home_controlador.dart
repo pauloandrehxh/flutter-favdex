@@ -9,8 +9,8 @@ import 'package:favdex/data/models/pokemon_model.dart';
 class HomeControlador extends GetxController {
   var pokemonList = <PokemonModel>[].obs;
   var loading = false.obs;
+  var favoritos = <int>[].obs;
 
-  // 1. Variável que faltava declarar!
   var loadingMore = false.obs;
 
   String? urlProximaPagina =
@@ -21,6 +21,9 @@ class HomeControlador extends GetxController {
     super.onInit();
     buscarApi();
   }
+
+
+
 
   Future<void> buscarApi() async {
     if (urlProximaPagina == null || loadingMore.value) return;
@@ -64,5 +67,19 @@ class HomeControlador extends GetxController {
       loading.value = false;
       loadingMore.value = false;
     }
+  }
+
+
+
+  void toggleFavorito(PokemonModel pokemon) {
+    if (favoritos.contains(pokemon.id)){
+      favoritos.remove(pokemon.id);
+    } else {
+      favoritos.add(pokemon.id);
+    }
+  }
+
+  bool isFavorito(PokemonModel pokemon) {
+    return favoritos.contains(pokemon.id);
   }
 }
