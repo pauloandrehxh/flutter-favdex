@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:favdex/home/home_page.dart';
+import 'package:favdex/app/app_pages.dart';
 
 
 class FavDexApp extends StatelessWidget {
@@ -12,7 +12,7 @@ class FavDexApp extends StatelessWidget {
       title: 'FavDex',
       debugShowCheckedModeBanner: false,
       initialRoute: '/home',
-      getPages: [GetPage(name: '/home', page: () => const Home())],
+      getPages: AppPages.pages,
     );
   }
 }
