@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:favdex/home/home_controlador.dart';
-import 'widgets/pokemon_grid_home.dart';
+import 'widgets_home/pokemon_grid_home.dart';
 import '../app/bottoms.dart';
+import '../app/Widget_app/pokedex_len.dart';
 
 
 class Home extends StatelessWidget {
@@ -13,7 +14,14 @@ class Home extends StatelessWidget {
     final controlador = Get.put(HomeControlador(), permanent: true);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('FavDex')),
+      appBar: AppBar(
+        leadingWidth: 80, 
+        toolbarHeight: 80,
+        leading: const PokedexLen(),
+        centerTitle: true,
+        title: const Text('FavDex'),
+      ),
+
       body: Obx(() {
         if (controlador.loading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -33,6 +41,5 @@ class Home extends StatelessWidget {
       }),
       bottomNavigationBar: Bottoms(),
     );
-
   }
 }
