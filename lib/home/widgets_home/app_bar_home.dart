@@ -14,8 +14,32 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget{
   Widget build(BuildContext context) {
     final controlador = Get.find<HomeControlador>();
     return AppBar(
-      leadingWidth: 80, 
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: true,
       toolbarHeight: 80,
+      flexibleSpace: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.red.shade300, Colors.red.shade800],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.35),
+              offset: const Offset(0, 8),
+              blurRadius: 18,
+            ),
+            BoxShadow(
+              color: Colors.white.withOpacity(0.08),
+              offset: const Offset(0, -3),
+              blurRadius: 6,
+            ),
+          ],
+        ),
+     ),
+      leadingWidth: 80, 
       leading: PopupMenuButton(
         onSelected: (index) {
           switch (index) {
@@ -69,7 +93,6 @@ class AppBarHome extends StatelessWidget implements PreferredSizeWidget{
           ),
         ],
       ),
-      centerTitle: true,
       title: const Text('FavDex'),
     );
   }
