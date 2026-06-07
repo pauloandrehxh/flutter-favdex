@@ -15,51 +15,56 @@ class PokemonCard extends StatelessWidget{
 
 
     return Card(
-      child: Stack(
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (pokemon.imageUrl != null)
-                  Image.network(pokemon.imageUrl!, height: 100),
-                Text('ID: ${pokemon.id}'),
-                Text(
-                  pokemon.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+      child: InkWell(
+        onTap: () {
+          print('detalhes');
+        },
+        child: Stack(
+          children: [
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (pokemon.imageUrl != null)
+                    Image.network(pokemon.imageUrl!, height: 100),
+                  Text('ID: ${pokemon.id}'),
+                  Text(
+                    pokemon.name,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                Text('Peso: ${pokemon.weight}'),
-                Text('Altura: ${pokemon.height}'),
-              ],
+                  Text('Peso: ${pokemon.weight}'),
+                  Text('Altura: ${pokemon.height}'),
+                ],
+              ),
             ),
-          ),
 
-          Positioned(
-            bottom: 8,
-            right: 8,
-            child: Obx(() {
-              final isFavorito = controlador.isFavorito(pokemon);
-              if (isFavorito) {
+            Positioned(
+              bottom: 8,
+              right: 8,
+              child: Obx(() {
+                final isFavorito = controlador.isFavorito(pokemon);
+                if (isFavorito) {
+                  return IconButton(
+                    icon: const Icon(Icons.favorite,
+                    color: Colors.red),
+                    onPressed: () {
+                      controlador.toggleFavorito(pokemon);
+                    },
+                  );
+                }
                 return IconButton(
-                  icon: const Icon(Icons.favorite,
-                  color: Colors.red),
-                  onPressed: () {
+                  icon: const Icon(Icons.favorite_border),
+                  onPressed: () { 
                     controlador.toggleFavorito(pokemon);
                   },
                 );
-              }
-              return IconButton(
-                icon: const Icon(Icons.favorite_border),
-                onPressed: () { 
-                  controlador.toggleFavorito(pokemon);
-                },
-              );
-            }),
-          ),
-        ],
+              }),
+            ),
+          ],
+        ),
       ),
     );
   }

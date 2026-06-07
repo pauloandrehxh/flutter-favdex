@@ -39,6 +39,9 @@ class FavoritesPage extends StatelessWidget {
             }
 
             return ListTile(
+              onTap: () {
+                print('detalhes');
+              },
               leading: imagem,
               title: Text(pokemon.name),
             );
