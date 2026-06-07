@@ -15,9 +15,7 @@ class FavoritesPage extends StatelessWidget {
       appBar: AppBar(title: const Text('FavDex')),
       body: Obx(() {
 
-        final pokemonsFavoritos = favoritosControlador.pokemonList
-        .where((pokemon) => favoritosControlador.favoritos.contains(pokemon.id))
-        .toList();
+        final pokemonsFavoritos = favoritosControlador.favoritosMap.values.toList();
 
         if (pokemonsFavoritos.isEmpty) {
           return const Center(child: Text('Nenhum Pokémon favorito encontrado.'));

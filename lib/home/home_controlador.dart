@@ -11,6 +11,7 @@ class HomeControlador extends GetxController {
   var loading = false.obs;
   var favoritos = <int>[].obs;
   var loadingMore = false.obs;
+  var favoritosMap = <int, PokemonModel>{}.obs;
   var urlList = <String>[
     'https://pokeapi.co/api/v2/pokemon?offset=0&limit=20',
     'https://pokeapi.co/api/v2/pokedex/2/',   ///["pokemon_entries"][id]["pokemon_species"]["name"]  KANTO
@@ -97,15 +98,15 @@ class HomeControlador extends GetxController {
 
 
   void toggleFavorito(PokemonModel pokemon) {
-    if (favoritos.contains(pokemon.id)){
-      favoritos.remove(pokemon.id);
+    if (favoritosMap.containsKey(pokemon.id)){
+      favoritosMap.remove(pokemon.id);
     } else {
-      favoritos.add(pokemon.id);
+      favoritosMap[pokemon.id] = pokemon;
     }
   }
 
   bool isFavorito(PokemonModel pokemon) {
-    return favoritos.contains(pokemon.id);
+    return favoritosMap.containsKey(pokemon.id);
   }
 
 
