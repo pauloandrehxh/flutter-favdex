@@ -10,15 +10,22 @@ class HomeControlador extends GetxController {
   var pokemonList = <PokemonModel>[].obs;
   var loading = false.obs;
   var favoritos = <int>[].obs;
-
   var loadingMore = false.obs;
-
-  String? urlProximaPagina =
-      'https://pokeapi.co/api/v2/pokemon?offset=0&limit=20';
+  var urlList = <String>[
+    'https://pokeapi.co/api/v2/pokemon?offset=0&limit=20',
+    'https://pokeapi.co/api/v2/pokedex/2/',   ///["pokemon_entries"][id]["pokemon_species"]["name"]  KANTO
+    'https://pokeapi.co/api/v2/pokedex/7/',   ///["pokemon_entries"][id]["pokemon_species"]["name"]  JOTHO
+    'https://pokeapi.co/api/v2/pokedex/15/',
+    'https://pokeapi.co/api/v2/pokedex/6/',
+    'https://pokeapi.co/api/v2/pokedex/9/',
+  ];
+  String? urlProximaPagina;
+  int urlEscolhida = 0;
 
   @override
   void onInit() {
     super.onInit();
+    urlProximaPagina = urlList[urlEscolhida];
     buscarApi();
   }
 
@@ -40,13 +47,23 @@ class HomeControlador extends GetxController {
       if (resposta.statusCode == 200) {
         final Map<String, dynamic> dados = jsonDecode(resposta.body);
 
-        urlProximaPagina = dados['next'];
+        final bool isPokedexResponse = dados.containsKey('pokemon_entries');
+        urlProximaPagina = isPokedexResponse ? null : dados['next'];
 
-        final List<dynamic> resultados = dados['results'];
+        final List<dynamic> resultados = isPokedexResponse
+            ? dados['pokemon_entries']
+            : dados['results'];
 
         List<Future<http.Response>> chamadasPendentes = [];
-        for (var pokemon in resultados) {
-          final uriPokemon = Uri.parse(pokemon['url']);
+        for (var item in resultados) {
+          Uri uriPokemon;
+          if (isPokedexResponse) {
+            final species = item['pokemon_species'];
+            final String nome = species['name'];
+            uriPokemon = Uri.parse('https://pokeapi.co/api/v2/pokemon/$nome');
+          } else {
+            uriPokemon = Uri.parse(item['url']);
+          }
           chamadasPendentes.add(http.get(uriPokemon));
         }
 
@@ -70,6 +87,14 @@ class HomeControlador extends GetxController {
   }
 
 
+  void escolhaUrl(int index) {
+    urlEscolhida = index;
+    urlProximaPagina = urlList[urlEscolhida];
+    pokemonList.clear();
+    buscarApi();
+  }
+
+
 
   void toggleFavorito(PokemonModel pokemon) {
     if (favoritos.contains(pokemon.id)){
@@ -82,4 +107,7 @@ class HomeControlador extends GetxController {
   bool isFavorito(PokemonModel pokemon) {
     return favoritos.contains(pokemon.id);
   }
+
+
+
 }
