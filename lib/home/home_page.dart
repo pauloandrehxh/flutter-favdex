@@ -17,7 +17,16 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         leadingWidth: 80, 
         toolbarHeight: 80,
-        leading: const PokedexLen(),
+        leading: PopupMenuButton(
+          offset: Offset(60, 60),
+          child: const PokedexLen(),
+          itemBuilder: (BuildContext context) => [
+            const PopupMenuItem<String>(
+              value: 'geracao',
+              child: Text('Filtrar por Geração'),
+            ),
+          ],
+        ),
         centerTitle: true,
         title: const Text('FavDex'),
       ),
