@@ -40,7 +40,7 @@ class FavoritesPage extends StatelessWidget {
 
             return ListTile(
               onTap: () {
-                print('detalhes');
+                Get.toNamed('details');
               },
               leading: imagem,
               title: Text(pokemon.name),

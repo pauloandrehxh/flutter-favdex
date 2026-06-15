@@ -17,7 +17,7 @@ class PokemonCard extends StatelessWidget{
     return Card(
       child: InkWell(
         onTap: () {
-          print('detalhes');
+          Get.toNamed('/details');
         },
         child: Stack(
           children: [
