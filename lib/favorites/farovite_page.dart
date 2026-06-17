@@ -12,7 +12,10 @@ class FavoritesPage extends StatelessWidget {
     final favoritosControlador = Get.find<HomeControlador>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('FavDex')),
+      appBar: AppBar(
+        title: const Text('FavDex')
+        
+      ),
       body: Obx(() {
 
         final pokemonsFavoritos = favoritosControlador.favoritosMap.values.toList();
