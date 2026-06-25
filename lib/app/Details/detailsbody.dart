@@ -47,14 +47,27 @@ class DetailsBody extends StatelessWidget{
         child: Center(
           child: Card(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Image.network(pokemon.imageUrl!),
                 Text(pokemon.name),
                 Text('ID: ${pokemon.id}'),
                 Text('PESO:${pokemon.weight}'),
-                Text('ALTURA${pokemon.height}'),
+                Text('ALTURA: ${pokemon.height}'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text('Hp: ${pokemon.hp}'),
+                    Text('Attack: ${pokemon.attack}'),
+                    Text('Defense: ${pokemon.defense}'),
+                    Text('spAttack: ${pokemon.spAttack}'),
+                    Text('spDefense: ${pokemon.spDefense}'),
+                    Text('Speed: ${pokemon.speed}'),
+                  ],
+                ),
+                Text('StatusBase: ${pokemon.statusBase}'),
               ],
-            )
+            ),
           ),
         ),
       )
