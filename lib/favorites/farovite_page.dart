@@ -12,7 +12,10 @@ class FavoritesPage extends StatelessWidget {
     final favoritosControlador = Get.find<HomeControlador>();
 
     return Scaffold(
-      appBar: AppBar(title: const Text('FavDex')),
+      appBar: AppBar(
+        title: const Text('FavDex')
+        
+      ),
       body: Obx(() {
 
         final pokemonsFavoritos = favoritosControlador.favoritosMap.values.toList();
@@ -26,25 +29,29 @@ class FavoritesPage extends StatelessWidget {
           itemBuilder: (context, index) {
             final pokemon = pokemonsFavoritos[index];
             Widget imagem;
+              if (pokemon.imageUrl != null) {
+                imagem = Image.network(
+                  pokemon.imageUrl!,
+                  height: 56,
+                  width: 56,
+                );
+              } 
+              else {
+                imagem = const Icon(Icons.image_not_supported);
+              }
 
-            if (pokemon.imageUrl != null) {
-              imagem = Image.network(
-                pokemon.imageUrl!,
-                height: 56,
-                width: 56,
+              return Card(
+                child: ListTile(
+                  onTap: () {
+                    Get.toNamed(
+                      'details',
+                      arguments: pokemon,
+                    );
+                  },
+                  leading: imagem,
+                  title: Text(pokemon.name),
+                ),
               );
-            } 
-            else {
-              imagem = const Icon(Icons.image_not_supported);
-            }
-
-            return ListTile(
-              onTap: () {
-                Get.toNamed('details');
-              },
-              leading: imagem,
-              title: Text(pokemon.name),
-            );
           },
         );
       }),
