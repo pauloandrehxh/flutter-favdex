@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:favdex/app/app_pages.dart';
+import 'package:favdex/routes/app_pages.dart';
 
 
 class FavDexApp extends StatelessWidget {

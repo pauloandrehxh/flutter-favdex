@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:favdex/app/Details/details_controller.dart';
+import 'package:favdex/modules/details/details_controller.dart';
 
 class DetailsBody extends StatelessWidget{
   const DetailsBody ({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:favdex/app/Widget_app/pokedex_len.dart';
-import 'package:favdex/home/home_controlador.dart';
+import 'package:favdex/core/widgets/pokedex_len.dart';
+import 'package:favdex/modules/home/home_controlador.dart';
 
 
 

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:favdex/home/home_page.dart';
-import 'package:favdex/favorites/farovite_page.dart';
-import 'package:favdex/app/Details/detailspage.dart';
+import 'package:favdex/modules/home/home_page.dart';
+import 'package:favdex/modules/favorites/favorite_page.dart';
+import 'package:favdex/modules/details/details_page.dart';
 
 class AppPages {
   static final pages = [

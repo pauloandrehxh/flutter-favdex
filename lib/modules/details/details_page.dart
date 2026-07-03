@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:favdex/app/Details/detailsbody.dart';
+import 'package:favdex/modules/details/details_body.dart';
 
 class DetailsPage extends StatelessWidget{
   const DetailsPage({super.key});
