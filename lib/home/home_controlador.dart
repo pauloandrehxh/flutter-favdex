@@ -1,21 +1,20 @@
-import 'dart:convert';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:favdex/data/models/pokemon_model.dart';
-
-
-
+import 'package:favdex/data/providers/poke_api_provider.dart';
 
 class HomeControlador extends GetxController {
+  final PokeApiProvider provider = PokeApiProvider();
+
   var pokemonList = <PokemonModel>[].obs;
   var loading = false.obs;
   var favoritos = <int>[].obs;
   var loadingMore = false.obs;
   var favoritosMap = <int, PokemonModel>{}.obs;
+  
   var urlList = <String>[
     'https://pokeapi.co/api/v2/pokemon?offset=0&limit=20',
-    'https://pokeapi.co/api/v2/pokedex/2/',   ///["pokemon_entries"][id]["pokemon_species"]["name"]  KANTO
-    'https://pokeapi.co/api/v2/pokedex/7/',   ///["pokemon_entries"][id]["pokemon_species"]["name"]  JOTHO
+    'https://pokeapi.co/api/v2/pokedex/2/',   /// KANTO
+    'https://pokeapi.co/api/v2/pokedex/7/',   /// JOTHO
     'https://pokeapi.co/api/v2/pokedex/15/',
     'https://pokeapi.co/api/v2/pokedex/6/',
     'https://pokeapi.co/api/v2/pokedex/9/',
@@ -30,72 +29,39 @@ class HomeControlador extends GetxController {
     buscarApi();
   }
 
-
-
-
   Future<void> buscarApi() async {
     if (urlProximaPagina == null || loadingMore.value) return;
 
     try {
       if (pokemonList.isEmpty) {
         loading.value = true;
-      }
-      loadingMore.value = true;
-
-      final uri = Uri.parse(urlProximaPagina!);
-      final resposta = await http.get(uri);
-
-      if (resposta.statusCode == 200) {
-        final Map<String, dynamic> dados = jsonDecode(resposta.body);
-
-        final bool isPokedexResponse = dados.containsKey('pokemon_entries');
-        urlProximaPagina = isPokedexResponse ? null : dados['next'];
-
-        final List<dynamic> resultados = isPokedexResponse
-            ? dados['pokemon_entries']
-            : dados['results'];
-
-        List<Future<http.Response>> chamadasPendentes = [];
-        for (var item in resultados) {
-          Uri uriPokemon;
-          if (isPokedexResponse) {
-            final species = item['pokemon_species'];
-            final String nome = species['name'];
-            uriPokemon = Uri.parse('https://pokeapi.co/api/v2/pokemon/$nome');
-          } else {
-            uriPokemon = Uri.parse(item['url']);
-          }
-          chamadasPendentes.add(http.get(uriPokemon));
-        }
-
-        final respostas = await Future.wait(chamadasPendentes);
-
-        for (var respostaPokemon in respostas) {
-          if (respostaPokemon.statusCode == 200) {
-            final dadosPokemon = jsonDecode(respostaPokemon.body);
-            pokemonList.add(PokemonModel.fromJson(dadosPokemon));
-          }
-        }
       } else {
-        print('Erro na resposta: ${resposta.statusCode}');
+        loadingMore.value = true;
       }
+
+      final resposta = await provider.fetchPokemonListFromUrl(urlProximaPagina!);
+      
+      urlProximaPagina = resposta['next'];
+      final novosPokemons = resposta['pokemons'] as List<PokemonModel>;
+      
+      pokemonList.addAll(novosPokemons);
+
     } catch (e) {
       print('Erro ao buscar dados: $e');
+      Get.snackbar('Erro', 'Falha ao carregar Pokémons.');
     } finally {
       loading.value = false;
       loadingMore.value = false;
     }
   }
 
-
   void escolhaUrl(int index) {
+    if (urlEscolhida == index) return;
     urlEscolhida = index;
     urlProximaPagina = urlList[urlEscolhida];
     pokemonList.clear();
     buscarApi();
   }
-
-
 
   void toggleFavorito(PokemonModel pokemon) {
     if (favoritosMap.containsKey(pokemon.id)){
@@ -108,7 +74,4 @@ class HomeControlador extends GetxController {
   bool isFavorito(PokemonModel pokemon) {
     return favoritosMap.containsKey(pokemon.id);
   }
-
-
-
 }
