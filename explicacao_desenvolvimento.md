@@ -249,3 +249,46 @@ Isso ocorreu porque:
 3.  **Design "Premium" com Barras de Progresso:**
     *   Removemos o empilhamento cru de textos (`Text('Hp: 45')`) e criamos o componente reusável `_buildStatRow`.
     *   Ele divide as informações em um formato visual de videogame, usando o widget `LinearProgressIndicator`, mostrando graficamente o poder de Ataque, Defesa e Velocidade de acordo com as cores clássicas de RPG.
+
+---
+
+## 🚀 Branch: `feature/search-page` (Página de Busca Dedicada)
+
+### O Objetivo
+Transformar o botão de "Configurações" na barra de navegação inferior em um botão de "Busca", direcionando o usuário para uma página dedicada de pesquisa de Pokémon.
+
+### O Que Foi Desenvolvido
+
+1.  **Refatoração do `BottomNavigationBar`:**
+    *   No arquivo `bottoms.dart`, o botão "Configurações" foi substituído pelo botão de "Busca" com o ícone de lupa (`Icons.search`).
+    *   Implementamos a lógica inteligente `Get.currentRoute` para garantir que o menu inferior sempre mostre a aba selecionada corretamente e use `Get.offAllNamed()` para evitar acumular telas na memória.
+
+2.  **Criação do `SearchPokemonController`:**
+    *   Um controlador isolado para a tela de buscas que gerencia o campo de texto (`TextEditingController`).
+    *   Utiliza o método `provider.getPokemonDetails(query)` para bater na PokeAPI com o ID numérico (ex: `25`) ou o nome (ex: `pikachu`).
+    *   Gerencia os estados reativos de `isLoading` (girando o loading spinner durante a requisição) e `errorMessage` (caso o Pokémon não exista).
+
+3.  **Criação da `SearchPage`:**
+    *   Uma tela contendo uma barra de pesquisa estilizada (`TextField` com bordas arredondadas e botão para limpar a busca).
+    *   Um botão grande e destacado para disparar a busca.
+    *   Na parte inferior, um grande container reativo (`Obx`) exibe:
+        *   Mensagem de boas vindas, se nenhuma busca tiver sido feita.
+        *   Loading, se a API estiver processando.
+        *   Mensagem de erro vermelha se não for encontrado.
+        *   O próprio `PokemonCard` (reaproveitado da tela Home) se a busca for bem sucedida!
+
+4.  **Registro de Rotas Centralizadas:**
+    *   A página de busca foi devidamente registrada no arquivo de rotas globais `app_pages.dart` sob o nome `'/search'`.
+
+### Evolução da Navegação (IndexedStack)
+Logo após criar a Busca, notamos que a navegação do rodapé causava um "redesenho" total da tela (fazendo até a barra superior piscar ou sumir). Para resolver isso e deixar as barras superior e inferior **fixas**:
+*   Criamos o `MainPage` e `MainController` (`lib/modules/main/`).
+*   Tornamos o `MainPage` a rota principal do app (`initialRoute: '/main'`).
+*   Ele engloba um `Scaffold` que segura o `BottomNavigationBar` de forma fixa. No "meio" (o `body`), usamos um **`IndexedStack`**. 
+*   O `IndexedStack` guarda a Home, Favoritos e Busca na memória ao mesmo tempo, apenas mudando qual delas está visível. Isso deixa a troca de abas instantânea, sem piscar a tela, dando uma cara totalmente profissional ao app!
+
+### Visual Unificado e Premium (Global AppBar)
+Em seguida, para garantir uma identidade visual consistente:
+*   Removemos os `AppBars` antigos espalhados pelas telas e injetamos **um único `AppBar` global** dentro do `MainPage`.
+*   Desenhamos um novo título "FAVDEX" centralizado, com fonte mais encorpada (`w900`), espaçamento (`letterSpacing`), e uma sombra sutil para dar um contraste elegante contra o fundo vermelho.
+*   Mantivemos a inteligência: O menu de filtros de região (`PokedexLen`) só aparece na lateral esquerda quando o usuário está na aba da Home. Nas outras abas, ele desaparece sutilmente!

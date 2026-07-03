@@ -5,7 +5,9 @@ class PokedexLen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: Container(
       width: 80,
       height: 80,
       margin: const EdgeInsets.all(10),
@@ -90,6 +92,7 @@ class PokedexLen extends StatelessWidget {
             ),
           ),
         ),
+      ),
       ),
     );
   }  

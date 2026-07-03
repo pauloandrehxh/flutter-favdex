@@ -11,7 +11,7 @@ class FavDexApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'FavDex',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
+      initialRoute: '/main',
       getPages: AppPages.pages,
     );
   }
