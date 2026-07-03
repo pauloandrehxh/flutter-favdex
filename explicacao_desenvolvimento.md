@@ -224,3 +224,28 @@ Após integrar os botões de filtros por Região da Pokédex (Kanto, Johto, etc.
 3.  **Limpeza no Card e Controlador:**
     *   No `home_controlador.dart`, chamamos de forma reativa apenas o provider, injetando instantaneamente os dados.
     *   No `pokemon_cards.dart`, removemos a visualização estática do peso/altura (pois agora essas variáveis vêm nulas na listagem rápida). Adicionamos também o comando `capitalizeFirst` ao nome do Pokémon para deixar com aspecto Premium (Ex: `pikachu` vira `Pikachu`).
+
+---
+
+## 🚀 Branch: `feature/detalhes-pokemon` (Correção e Tela Completa)
+
+### O Problema Identificado
+A tela de detalhes (`DetailsBody`) estava quebrando a interface com uma tela amarela e preta de erro ("RenderFlex overflowed by 203 pixels na bottom"). 
+Isso ocorreu porque:
+1. Usamos a estrutura estática `Column` sem suporte à barra de rolagem.
+2. Como otimizamos a página principal para não baixar peso/altura, os dados passados para a página de detalhes vinham nulos, exigindo que a tela buscasse essas informações na hora.
+
+### A Solução Implementada
+
+1.  **Criação do `DetailsController`:**
+    *   Fizemos um controlador isolado (`lib/app/Details/details_controller.dart`) que captura o Pokémon enviado pela Home.
+    *   Ao ser inicializado, ele dispara um comando para o `PokeApiProvider` buscando especificamente pelo nome do Pokémon.
+    *   Assim que a PokeAPI responde, ele atualiza as variáveis da tela preenchendo todos os `stats`, `weight` e `height`.
+
+2.  **Prevenção de Erros na Tela (`DetailsBody`):**
+    *   Substituímos o envelopamento do cartão central por um **`SingleChildScrollView`**. Agora, independentemente do tamanho da tela do celular, o usuário pode fazer *scroll* pelos stats sem dar erro de RenderFlex.
+    *   Ocultamos o cartão de detalhes e mostramos um `CircularProgressIndicator()` girando no centro até que o controlador termine de buscar os dados completos.
+
+3.  **Design "Premium" com Barras de Progresso:**
+    *   Removemos o empilhamento cru de textos (`Text('Hp: 45')`) e criamos o componente reusável `_buildStatRow`.
+    *   Ele divide as informações em um formato visual de videogame, usando o widget `LinearProgressIndicator`, mostrando graficamente o poder de Ataque, Defesa e Velocidade de acordo com as cores clássicas de RPG.

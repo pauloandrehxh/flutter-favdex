@@ -28,30 +28,24 @@ class FavoritesPage extends StatelessWidget {
           itemCount: pokemonsFavoritos.length,
           itemBuilder: (context, index) {
             final pokemon = pokemonsFavoritos[index];
-            Widget imagem;
-              if (pokemon.imageUrl != null) {
-                imagem = Image.network(
-                  pokemon.imageUrl!,
-                  height: 56,
-                  width: 56,
-                );
-              } 
-              else {
-                imagem = const Icon(Icons.image_not_supported);
-              }
+            Widget imagem = Image.network(
+              pokemon.imageUrl,
+              height: 56,
+              width: 56,
+            );
 
-              return Card(
-                child: ListTile(
-                  onTap: () {
-                    Get.toNamed(
-                      'details',
-                      arguments: pokemon,
-                    );
-                  },
-                  leading: imagem,
-                  title: Text(pokemon.name),
-                ),
-              );
+            return Card(
+              child: ListTile(
+                onTap: () {
+                  Get.toNamed(
+                    '/details',
+                    arguments: pokemon,
+                  );
+                },
+                leading: imagem,
+                title: Text(pokemon.name.capitalizeFirst ?? pokemon.name),
+              ),
+            );
           },
         );
       }),
